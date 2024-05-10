@@ -76,7 +76,7 @@ class ContaPoupanca(Conta):
         self.saldo += self.saldo * (self.juros / 100)
         print('Juros aplicados com sucesso')
 
-#main
+def main():
     # Criando algumas contas de exemplo
     conta_corrente = ContaCorrente(nome="Fulano", codigo=1, saldo=1000.0, limite=500.0)
     conta_especial = ContaEspecial(nome="Ciclano", codigo=2, saldo=2000.0, bonus=20.0)
@@ -109,3 +109,5 @@ class ContaPoupanca(Conta):
     print("\nAplicando juros na conta poupança:")
     conta_poupanca.aplicar_juros()
     conta_poupanca.consultar_saldo()
+
+main()
