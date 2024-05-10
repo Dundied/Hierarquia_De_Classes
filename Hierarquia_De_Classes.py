@@ -17,9 +17,11 @@ class Conta:
 
     def saque(self, valor):
         if valor > 0.0:
-            if self.saldo >= valor:
+            if self.saldo >= valor and valor <= 700:
                 self.saldo -= valor
                 print(f'Saque realizado no valor de {valor}')
+            elif valor > 700:
+                print('Valor do saque excede o limite máximo de 700')
             else:
                 print('Saldo insuficiente')
         else:
@@ -44,9 +46,11 @@ class ContaCorrente(Conta):
 
     def saque(self, valor):
         if valor > 0.0:
-            if self.saldo + self.limite >= valor:
+            if self.saldo + self.limite >= valor and valor <= 700:
                 self.saldo -= valor
                 print(f'Saque realizado no valor de {valor}')
+            elif valor > 700:
+                print('Valor do saque excede o limite máximo de 700')
             else:
                 print('Limite de saldo + limite de crédito ultrapassado')
         else:
@@ -54,15 +58,28 @@ class ContaCorrente(Conta):
 
 
 class ContaEspecial(Conta):
-    def __init__(self, nome='', codigo=0, saldo=0.0, bonus=0.0):
+    def __init__(self, nome='', codigo=0, saldo=0.0, bonus=0.0, limite=0.0):
         super().__init__(nome, codigo, saldo)
         self.bonus = bonus
+        self.limite = limite
 
     def deposito(self, valor):
         if valor > 0.0:
             self.saldo += valor
             self.bonus += valor * 0.01
             print('Depósito e cálculo de bônus concluídos com sucesso')
+        else:
+            print('Valor inválido')
+
+    def saque(self, valor):
+        if valor > 0.0:
+            if self.saldo + self.limite >= valor and valor <= 700:
+                self.saldo -= valor * 1.05
+                print(f'Saque realizado no valor de {valor}')
+            elif valor > 700:
+                print('Valor do saque excede o limite máximo de 700')
+            else:
+                print('Limite de saldo + limite de crédito ultrapassado')
         else:
             print('Valor inválido')
 
@@ -73,13 +90,26 @@ class ContaPoupanca(Conta):
         self.juros = juros
 
     def aplicar_juros(self):
-        self.saldo += self.saldo * (self.juros / 100)
+        self.saldo += self.saldo * ((self.juros / 100) + 0.005)  # Reajuste de valor (inflação + 0.5%)
         print('Juros aplicados com sucesso')
+
+    def saque(self, valor):
+        if valor > 0.0:
+            if self.saldo >= valor and valor <= 700:
+                self.saldo -= valor
+                print(f'Saque realizado no valor de {valor}')
+            elif valor > 700:
+                print('Valor do saque excede o limite máximo de 700')
+            else:
+                print('Saldo insuficiente')
+        else:
+            print('Valor inválido')
+
 
 def main():
     # Criando algumas contas de exemplo
     conta_corrente = ContaCorrente(nome="Fulano", codigo=1, saldo=1000.0, limite=500.0)
-    conta_especial = ContaEspecial(nome="Ciclano", codigo=2, saldo=2000.0, bonus=20.0)
+    conta_especial = ContaEspecial(nome="Ciclano", codigo=2, saldo=2000.0, bonus=20.0, limite=1000.0)
     conta_poupanca = ContaPoupanca(nome="Beltrano", codigo=3, saldo=5000.0, juros=1.5)
 
     # Exemplo de operações com as contas
@@ -111,3 +141,4 @@ def main():
     conta_poupanca.consultar_saldo()
 
 main()
+
